@@ -10,7 +10,14 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const assetRoutes = require('./routes/assetRoutes');
 const itemMasterRoutes = require('./routes/itemMasterRoutes');
 const assetCategoryRoutes = require('./routes/assetCategoryRoutes');
-
+const vendorRoutes = require('./routes/vendorRoutes');
+const unitOfMeasureRoutes = require('./routes/unitOfMeasureRoutes');
+const locationRoutes = require('./routes/locationRoutes');
+const roleRoutes = require('./routes/roleRoutes');
+const userRoleRoutes = require('./routes/userRoleRoutes');
+const permissionRoutes = require('./routes/permissionRoutes');
+const rolePermissionRoutes = require('./routes/rolePermissionRoutes');
+const assetLifecycleEventRoutes = require('./routes/assetLifecycleEventRoutes')
 
 const app = express();
 
@@ -28,6 +35,13 @@ app.use('/api/assets', assetRoutes);
 app.use('/api/item-masters', itemMasterRoutes);
 app.use('/api/asset-categories', assetCategoryRoutes);
 app.use('/api/vendors', vendorRoutes);
+app.use('/api/units-of-measure', unitOfMeasureRoutes);
+app.use('/api/locations', locationRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/user-roles', userRoleRoutes);
+app.use('/api/permissions', permissionRoutes)
+app.use('/api/role-permissions', rolePermissionRoutes)
+app.use('/api/asset-lifecycle-events', assetLifecycleEventRoutes);
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
