@@ -17,7 +17,10 @@ const roleRoutes = require('./routes/roleRoutes');
 const userRoleRoutes = require('./routes/userRoleRoutes');
 const permissionRoutes = require('./routes/permissionRoutes');
 const rolePermissionRoutes = require('./routes/rolePermissionRoutes');
-const assetLifecycleEventRoutes = require('./routes/assetLifecycleEventRoutes')
+const assetLifecycleEventRoutes = require('./routes/assetLifecycleEventRoutes');
+const assetAssignmentRoutes = require('./routes/assetAssignmentRoutes');
+const assetTransferRoutes = require('./routes/assetTransferRoutes')
+const assetLoanRoutes = require('./routes/assetLoanRoutes');
 
 const app = express();
 
@@ -42,6 +45,10 @@ app.use('/api/user-roles', userRoleRoutes);
 app.use('/api/permissions', permissionRoutes)
 app.use('/api/role-permissions', rolePermissionRoutes)
 app.use('/api/asset-lifecycle-events', assetLifecycleEventRoutes);
+app.use('/api/asset-assignments', assetAssignmentRoutes);
+app.use('/api/asset-transfers', assetTransferRoutes);
+app.use('/api/asset-loans', assetLoanRoutes)
+
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
