@@ -23,6 +23,9 @@ const assetTransferRoutes = require('./routes/assetTransferRoutes')
 const assetLoanRoutes = require('./routes/assetLoanRoutes');
 const assetRelationshipRoutes = require('./routes/assetRelationshipRoutes');
 const assetLocationEventRoutes = require('./routes/assetLocationEventRoutes');
+const inventoryBalanceRoutes = require('./routes/inventoryBalanceRoutes');
+const inventoryBatchRoutes = require('./routes/inventoryBatchRoutes');
+const inventoryTransactionRoutes = require('./routes/inventoryTransactionRoutes');
 
 const app = express();
 
@@ -52,8 +55,9 @@ app.use('/api/asset-transfers', assetTransferRoutes);
 app.use('/api/asset-loans', assetLoanRoutes)
 app.use('/api/asset-relationships', assetRelationshipRoutes);
 app.use('/api/asset-location-events', assetLocationEventRoutes);
-
-
+app.use('/api/inventory-balances', inventoryBalanceRoutes);
+app.use('/api/inventory-batches', inventoryBatchRoutes);
+app.use('/api/inventory-transactions', inventoryTransactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 
