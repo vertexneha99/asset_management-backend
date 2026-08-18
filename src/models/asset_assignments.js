@@ -5,7 +5,7 @@ const assetAssignmentSchema = new Schema({
   org_id: { type: Schema.Types.ObjectId, ref: 'Organization', required: true },
   asset_id: { type: Schema.Types.ObjectId, ref: 'Asset', required: true },
   assigned_to_type: { type: String, required: true, trim: true },
-  assigned_to_id: { type: Schema.Types.ObjectId, required: true },
+  assigned_to_id: { type: Schema.Types.ObjectId, required: true, refPath: 'assigned_to_type' },
   assigned_by: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   assignment_date: { type: Date, default: Date.now },
   expected_return_date: { type: Date, default: null },
