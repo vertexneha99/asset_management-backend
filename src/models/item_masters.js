@@ -15,6 +15,12 @@ const itemMasterSchema = new Schema(
     capitalizable: { type: Boolean, default: false },
     default_attributes: { type: Schema.Types.Mixed, default: {} },
     active: { type: Boolean, default: true },
+    description: { type: String, trim: true },
+    supplier_id: { type: Schema.Types.ObjectId, ref: 'Vendor', default: null },
+    location_id: { type: Schema.Types.ObjectId, ref: 'Location', default: null },
+    unit_cost: { type: Schema.Types.Decimal128, default: 0 },
+    min_reorder_level: { type: Number, default: 0 },
+    qr_code_url: { type: String, trim: true },
   },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
