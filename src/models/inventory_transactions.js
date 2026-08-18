@@ -12,7 +12,7 @@ const inventoryTransactionSchema = new Schema(
     from_location_id: { type: Schema.Types.ObjectId, ref: 'Location', default: null },
     to_location_id: { type: Schema.Types.ObjectId, ref: 'Location', default: null },
     reference_type: { type: String, trim: true },
-    reference_id: { type: Schema.Types.ObjectId, default: null },
+    reference_id: { type: String, trim: true, default: null },
     actor_id: { type: Schema.Types.ObjectId, ref: 'User', default: null },
     resulting_balance: { type: Number, default: null },
     idempotency_key: { type: String, trim: true },

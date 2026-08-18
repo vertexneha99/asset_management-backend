@@ -1,5 +1,6 @@
 const ItemMaster = require('../models/item_masters');
 const InventoryBalance = require('../models/inventory_balances');
+const AssetCategory = require('../models/asset_categories');
 
 function computeStatus(quantityInStock, minReorderLevel) {
   if (quantityInStock <= 0) return 'Out of Stock';
@@ -26,6 +27,50 @@ async function withStockFields(itemMasters, orgId) {
   });
 
   return Array.isArray(itemMasters) ? enriched : enriched[0];
+}
+
+function skuPrefixFromCategoryName(name) {
+  const letters = name.replace(/[^a-zA-Z]/g, '').toUpperCase();
+  return (letters.slice(0, 3) || 'ITM').padEnd(3, 'X');
+}
+
+function datePart() {
+  const now = new Date();
+  const yy = String(now.getFullYear()).slice(-2);
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  return `${yy}${mm}${dd}`;
+}
+
+function randomSuffix() {
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+async function generateSku(req, res) {
+  try {
+    let prefix = 'ITM';
+
+    if (req.query.category_id) {
+      const category = await AssetCategory.findOne({ _id: req.query.category_id, org_id: req.orgId });
+      if (category) {
+        prefix = skuPrefixFromCategoryName(category.name);
+      }
+    }
+
+    const datestamp = datePart();
+
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      const candidate = `${prefix}-${datestamp}-${randomSuffix()}`;
+      const exists = await ItemMaster.exists({ org_id: req.orgId, sku: candidate });
+      if (!exists) {
+        return res.json({ sku: candidate });
+      }
+    }
+
+    return res.status(500).json({ error: 'Could not generate a unique SKU, please try again' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
 
 async function createItemMaster(req, res) {
@@ -137,4 +182,4 @@ async function deleteItemMaster(req, res) {
   }
 }
 
-module.exports = { createItemMaster, listItemMasters, getItemMaster, updateItemMaster, deleteItemMaster };
+module.exports = { generateSku, createItemMaster, listItemMasters, getItemMaster, updateItemMaster, deleteItemMaster };

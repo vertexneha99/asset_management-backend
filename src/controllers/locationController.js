@@ -9,7 +9,11 @@ async function computeAncestors(parentId) {
 
 async function createLocation(req, res) {
   try {
-    const { type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status } = req.body;
+    const {
+      type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status,
+      city, country, total_floors, total_rooms, floor_number,
+      room_type, department, responsible_person, contact_details, description, notes,
+    } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'name is required' });
@@ -29,6 +33,17 @@ async function createLocation(req, res) {
       capacity,
       responsible_employee_id: responsible_employee_id || null,
       status,
+      city,
+      country,
+      total_floors,
+      total_rooms,
+      floor_number,
+      room_type,
+      department,
+      responsible_person,
+      contact_details,
+      description,
+      notes,
     });
 
     res.status(201).json(location);
@@ -42,7 +57,13 @@ async function createLocation(req, res) {
 
 async function listLocations(req, res) {
   try {
-    const locations = await Location.find({ org_id: req.orgId }).sort({ name: 1 });
+    const filter = { org_id: req.orgId };
+    if (req.query.parent_id !== undefined) {
+      filter.parent_id = req.query.parent_id === 'null' ? null : req.query.parent_id;
+    }
+    if (req.query.type) filter.type = req.query.type;
+
+    const locations = await Location.find(filter).sort({ name: 1 });
     res.json(locations);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -63,9 +84,17 @@ async function getLocation(req, res) {
 
 async function updateLocation(req, res) {
   try {
-    const { type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status } = req.body;
+    const {
+      type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status,
+      city, country, total_floors, total_rooms, floor_number,
+      room_type, department, responsible_person, contact_details, description, notes,
+    } = req.body;
 
-    const update = { type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status };
+    const update = {
+      type, code, name, parent_id, address, geo, capacity, responsible_employee_id, status,
+      city, country, total_floors, total_rooms, floor_number,
+      room_type, department, responsible_person, contact_details, description, notes,
+    };
 
     if (parent_id !== undefined) {
       update.ancestors = await computeAncestors(parent_id);

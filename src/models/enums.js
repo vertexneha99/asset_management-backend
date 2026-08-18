@@ -61,6 +61,13 @@ const WORK_ORDER_STATUS = [
   'CANCELLED',
 ];
 
+const LOCATION_TYPE = [
+  'SITE',
+  'BUILDING',
+  'FLOOR',
+  'ROOM',
+];
+
 module.exports = {
   LIFECYCLE_STATUS,
   ASSET_CONDITION,
@@ -69,4 +76,5 @@ module.exports = {
   INVENTORY_TRANSACTION_TYPE,
   APPROVAL_STATUS,
   WORK_ORDER_STATUS,
+  LOCATION_TYPE,
 };

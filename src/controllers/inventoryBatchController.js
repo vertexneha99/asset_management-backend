@@ -73,11 +73,26 @@ async function getBatch(req, res) {
 
 async function updateBatch(req, res) {
   try {
-    const { manufacturing_date, expiry_date, storage_conditions_verified, status } = req.body;
+    const {
+      batch_number, quantity_received, quantity_remaining, location_id,
+      manufacturing_date, expiry_date, storage_conditions_verified, status,
+    } = req.body;
+
+    if (location_id) {
+      const location = await Location.findOne({ _id: location_id, org_id: req.orgId });
+      if (!location) {
+        return res.status(400).json({ error: 'location_id does not belong to your organization' });
+      }
+    }
+
+    const update = {
+      batch_number, quantity_received, quantity_remaining, location_id,
+      manufacturing_date, expiry_date, storage_conditions_verified, status,
+    };
 
     const batch = await InventoryBatch.findOneAndUpdate(
       { _id: req.params.id, org_id: req.orgId },
-      { manufacturing_date, expiry_date, storage_conditions_verified, status },
+      update,
       { new: true, runValidators: true }
     );
 
@@ -87,6 +102,9 @@ async function updateBatch(req, res) {
 
     res.json(batch);
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ error: 'A batch with this batch_number already exists for this item in your organization' });
+    }
     res.status(500).json({ error: err.message });
   }
 }
