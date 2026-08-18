@@ -6,6 +6,8 @@ const {
   listAssets,
   getAsset,
   updateAsset,
+  trashAsset,
+  restoreAsset,
   deleteAsset,
 } = require('../controllers/assetController');
 
@@ -15,6 +17,8 @@ router.post('/', createAsset);
 router.get('/', listAssets);
 router.get('/:id', getAsset);
 router.put('/:id', updateAsset);
+router.put('/:id/trash', trashAsset);
+router.put('/:id/restore', restoreAsset);
 router.delete('/:id', deleteAsset);
 
 module.exports = router;
